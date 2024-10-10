@@ -1,6 +1,6 @@
 import inquirer from "inquirer";
-import pg from 'pg';
-import { Pool } from 'pg';
+import pkg from 'pg';
+const { Pool } = pkg;
 import dotenv from 'dotenv';
 dotenv.config();  // This will load the variables from the .env file
 
@@ -11,6 +11,13 @@ const pool = new Pool({
     database: process.env.DB_NAME,  // Replace with your database name
     password: process.env.DB_PASSWORD, // Replace with your database password
     port: Number(process.env.DB_PORT), // Replace with your port number (default is 5432)
+});
+
+pool.connect((err) => { 
+    if (err) { 
+        console.error('Database connection error:', err.stack); 
+    } else 
+    { console.log('Database connected'); } 
 });
 
 const mainMenu(): void => {
@@ -86,7 +93,7 @@ const viewRoles = () => {
     });
 };
 
-const viewEmployee = () => {
+const viewEmployees = () => {
     const query = "SELECT employee.first_name, employee.last_name, role.title, CONCAT(manager.first_name, ' ', manager.last_name) AS manager FROM employee JOIN role ON employee.role_id = role.id LEFT JOIN employee AS manager ON employee.manager_id = manager.id;";
     pool.query(query, (err, res) => {
         if (err) {
