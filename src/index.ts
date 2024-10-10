@@ -1,12 +1,6 @@
-const inquirer = require("inquirer");
-const { Client } = require("pg");
+import inquirer from "inquirer";
+import pg from 'pg';
 
-
-const client = new Client({
-
-});
-
-client.connect();
 
 const mainMenu = () => {
     inquirer
@@ -52,15 +46,13 @@ const mainMenu = () => {
         updateEmployeeRole();
         break;
     case "Exit":
-        client.end(); // Close the connection
-        process.exit();
     }
     });
 };
 
 const viewDepartments = () => {
   const query = "SELECT * FROM department;";
-    client.query(query, (err, res) => {
+    pool.query(query, (err, res) => {
     if (err) throw err;
     console.table(res.rows); // Display results in table format
     mainMenu(); // Return to the main menu after displaying
@@ -69,7 +61,7 @@ const viewDepartments = () => {
 
 const viewRoles = () => {
     const query = "SELECT role.title , department.name, role.salary FROM role JOIN department ON role.department_id = department.id;";
-    client.query(query, (err, res) => {
+    pool?.query(query, (err, res) => {
         if (err) throw err;
       console.table(res.rows); // Display results in table format
       mainMenu(); // Return to the main menu after displaying
@@ -78,13 +70,12 @@ const viewRoles = () => {
 
 const viewEmployee = () => {
     const query = "SELECT employee.first_name, employee.last_name, role.title, CONCAT(manager.first_name, ' ', manager.last_name) AS manager FROM employee JOIN role ON employee.role_id = role.id LEFT JOIN employee AS manager ON employee.manager_id = manager.id;";
-    client.query(query, (err, res) => {
+    pool?.query(query, (err, res) => {
     if (err) throw err;
       console.table(res.rows); // Display results in table format
       mainMenu(); // Return to the main menu after displaying
     });
 };
 
-// Similarly define functions for viewRoles, viewEmployees, addDepartment, addRole, addEmployee, and updateEmployeeRole
 
-mainMenu(); // Start the program by showing the main menu
+mainMenu(); 
