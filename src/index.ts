@@ -146,8 +146,8 @@ const addRole = () => {
             message: 'Enter the department id of the new role:',
         }
     ]).then(answer => {
-        const query = 'INSERT INTO role (title) VALUES ($1);';
-        pool.query(query, [answer.name], (err, res) => {
+        const query = 'INSERT INTO role (title, salary, department_id) VALUES ($1, $2, $3);';
+        pool.query(query, [answer.title, answer.salary, answer.department_id], (err, res) => {
             if (err) {
                 console.error('Error adding department', err.stack);
             } else {
@@ -181,8 +181,8 @@ const addEmployee = () => {
             message: 'Enter the id number of the new employees boss:',
         }
     ]).then(answer => {
-        const query = 'INSERT INTO role (title) VALUES ($1);';
-        pool.query(query, [answer.name], (err, res) => {
+        const query = 'INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ($1, $2, $3, $4);';
+        pool.query(query, [answer.first_name, answer.last_name, answer.role_id, answer.manager_id], (err, res) => {
             if (err) {
                 console.error('Error adding new employee', err.stack);
             } else {
@@ -216,8 +216,8 @@ const updateEmployeeRole = () => {
             message: 'Enter the managers id of the new emloyees boss:',
         }
     ]).then(answer => {
-        const query = 'INSERT INTO role (title) VALUES ($1);';
-        pool.query(query, [answer.name], (err, res) => {
+        const query = 'UPDATE employee SET role_id = $1 WHERE id = $2);';
+        pool.query(query, [answer.role_id, answer.employee_id], (err, res) => {
             if (err) {
                 console.error('Error updating employees role', err.stack);
             } else {
