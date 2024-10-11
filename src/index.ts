@@ -13,14 +13,14 @@ const pool = new Pool({
     port: Number(process.env.DB_PORT), // Replace with your port number (default is 5432)
 });
 
-pool.connect((err) => { 
+pool.connect((err: any) => { 
     if (err) { 
         console.error('Database connection error:', err.stack); 
     } else 
     { console.log('Database connected'); } 
 });
 
-const mainMenu(): void => {
+const mainMenu = (): void => {
     inquirer
     .prompt([
     {
@@ -75,8 +75,11 @@ const mainMenu(): void => {
 const viewDepartments = () => {
   const query = "SELECT * FROM department;";
     pool.query(query, (err, res) => {
-    if (err) throw err;
-    console.table(res.rows); // Display results in table format
+        if (err) {
+            console.error('Error fetching departments', err.stack);
+        } else {
+            console.table(res.rows);
+        }
     mainMenu(); // Return to the main menu after displaying
 });
 };
@@ -125,5 +128,104 @@ const addDepartment = () => {
     });
 };
 
+const addRole = () => {
+    inquirer.prompt([
+        {
+            type: 'input',
+            name: 'title',
+            message: 'Enter the title of the new role:',
+        },
+        {
+            type: 'input',
+            name: 'salary',
+            message: 'Enter the salary of the new role:',
+        },
+        {
+            type: 'input',
+            name: 'department_id',
+            message: 'Enter the department id of the new role:',
+        }
+    ]).then(answer => {
+        const query = 'INSERT INTO role (title) VALUES ($1);';
+        pool.query(query, [answer.name], (err, res) => {
+            if (err) {
+                console.error('Error adding department', err.stack);
+            } else {
+                console.log('Role added successfully');
+            }
+            mainMenu();
+        });
+    });
+};
+
+const addEmployee = () => {
+    inquirer.prompt([
+        {
+            type: 'input',
+            name: 'first_name',
+            message: 'Enter the first name of the new employee:',
+        },
+        {
+            type: 'input',
+            name: 'last_name',
+            message: 'Enter the last name of the new employee:',
+        },
+        {
+            type: 'input',
+            name: 'role_id',
+            message: 'Enter the id number of the new employees role:',
+        },
+        {
+            type: 'input',
+            name: 'manager_id',
+            message: 'Enter the id number of the new employees boss:',
+        }
+    ]).then(answer => {
+        const query = 'INSERT INTO role (title) VALUES ($1);';
+        pool.query(query, [answer.name], (err, res) => {
+            if (err) {
+                console.error('Error adding new employee', err.stack);
+            } else {
+                console.log('New employee added successfully');
+            }
+            mainMenu();
+        });
+    });
+};
+
+const updateEmployeeRole = () => {
+    inquirer.prompt([
+        {
+            type: 'input',
+            name: 'role',
+            message: 'Enter the first name of the new employee:',
+        },
+        {
+            type: 'input',
+            name: 'last_name',
+            message: 'Enter the last name of the new employee:',
+        },
+        {
+            type: 'input',
+            name: 'role_id',
+            message: 'Enter the id number of the new employees boss:',
+        },
+        {
+            type: 'input',
+            name: 'manager_id',
+            message: 'Enter the managers id of the new emloyees boss:',
+        }
+    ]).then(answer => {
+        const query = 'INSERT INTO role (title) VALUES ($1);';
+        pool.query(query, [answer.name], (err, res) => {
+            if (err) {
+                console.error('Error updating employees role', err.stack);
+            } else {
+                console.log('Employees role updated successfully');
+            }
+            mainMenu();
+        });
+    });
+};
 
 mainMenu(); 
