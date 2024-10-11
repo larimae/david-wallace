@@ -1,6 +1,6 @@
 import inquirer from "inquirer";
-import pkg from 'pg';
-const { Pool } = pkg;
+import pg from 'pg';
+const { Pool } = pg;
 import dotenv from 'dotenv';
 dotenv.config();  // This will load the variables from the .env file
 
