@@ -207,7 +207,7 @@ const updateEmployeeRole = () => {
         }
     ]).then(answer => {
         const query = 'UPDATE employee SET role_id = $1 WHERE id = $2);';
-        pool.query(query, [answer.role_id, answer.employee_id], (err, res) => {
+        pool.query(query, [answer.role_id, answer.employee_id], (err, employeeRes) => {
             if (err) {
                 console.error('Error updating employees role', err.stack);
             } else {
