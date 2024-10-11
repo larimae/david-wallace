@@ -197,23 +197,13 @@ const updateEmployeeRole = () => {
     inquirer.prompt([
         {
             type: 'input',
-            name: 'role',
-            message: 'Enter the first name of the new employee:',
-        },
-        {
-            type: 'input',
-            name: 'last_name',
-            message: 'Enter the last name of the new employee:',
+            name: 'employee_id',
+            message: 'Enter the employee ID:',
         },
         {
             type: 'input',
             name: 'role_id',
-            message: 'Enter the id number of the new employees boss:',
-        },
-        {
-            type: 'input',
-            name: 'manager_id',
-            message: 'Enter the managers id of the new emloyees boss:',
+            message: 'Enter the new role ID:',
         }
     ]).then(answer => {
         const query = 'UPDATE employee SET role_id = $1 WHERE id = $2);';
@@ -221,7 +211,7 @@ const updateEmployeeRole = () => {
             if (err) {
                 console.error('Error updating employees role', err.stack);
             } else {
-                console.log('Employees role updated successfully');
+                console.log('Employee role updated successfully');
             }
             mainMenu();
         });
